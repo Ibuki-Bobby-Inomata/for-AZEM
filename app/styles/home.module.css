@@ -1,0 +1,119 @@
+/* ページ全体のレイアウト */
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ヘッダー */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e3e1fa;
+    padding: 20px 40px;
+}
+
+.logo {
+    height: 40px;
+    /* ロゴの高さを大きく */
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.userAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.signOutButton {
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* メインコンテンツのラップ */
+.contentWrapper {
+    display: flex;
+    flex: 1;
+    background-color: #f5f5f5
+}
+
+/* 左側のサイドバー */
+.sidebar {
+    width: 330px;
+    background-color: #fff;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar h3 {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* メインコンテンツ */
+.mainContent {
+    flex: 1;
+    /* フレックスボックスで残りの幅を使う */
+    max-width: 1200px;
+    /* 最大幅を1200pxに制限 */
+    min-width: 600px;
+    /* 最小幅を600pxに設定 */
+    width: 80%;
+    /* ウィンドウの80%幅で可変 */
+    margin: 0 auto;
+    /* 中央配置 */
+    padding: 50px 20px;
+    /* 内側の余白 */
+    background-color: #f5f5f5;
+    /* 背景色 */
+}
+
+
+/* 検索バー */
+.searchBar {
+    display: flex;
+    justify-content: center;
+    margin-top: 0px;
+    /* 余白を完全になくす */
+    padding-top: 10px;
+    /* 微調整 */
+    width: 600px;
+}
+
+
+.searchInput {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.searchInputSaved {
+    width: 271px;
+    height: 32px;
+    padding: 15px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
