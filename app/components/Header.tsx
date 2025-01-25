@@ -19,7 +19,7 @@ export default function Header() {
                     <span>Loading...</span>
                 ) : session ? (
                     <>
-                        <img src={session.user?.image || "/default-avatar.png"} alt="User Avatar" className="userAvatar" />
+                        <Image src={session.user?.image || "/default-avatar.png"} alt="User Avatar" className="userAvatar" />
                         <span>{session.user?.name}</span>
                         <button onClick={() => signOut()} className="signOutButton">
                             Sign out
