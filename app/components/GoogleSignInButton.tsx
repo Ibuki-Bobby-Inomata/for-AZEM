@@ -10,12 +10,13 @@ export default function GoogleSignInButton() {
                 src="https://developers.google.com/identity/images/g-logo.png"
                 alt="Google Icon"
                 style={iconStyle}
+                width={20}   // 必要な幅を指定
+                height={20}
             />            Continue with Google
         </button>
     )
 }
 
-// スタイリング
 const googleButtonStyle: React.CSSProperties = {
     display: "flex",
     alignItems: "center",

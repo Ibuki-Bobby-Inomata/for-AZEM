@@ -11,7 +11,11 @@ export default function Header() {
     return (
         <header className="header">
             <Link href="/">
-                <img src="/azem_logo.png" alt="Azem Logo" className="logo" />
+                <Image src="/azem_logo.png" alt="Azem Logo" className="logo"
+                    width={10}
+                    height={10}
+                    sizes="100vw"
+                    style={{ width: "100px", height: "auto" }} />
             </Link>
 
             <div className="userInfo">
@@ -19,7 +23,10 @@ export default function Header() {
                     <span>Loading...</span>
                 ) : session ? (
                     <>
-                        <Image src={session.user?.image || "/default-avatar.png"} alt="User Avatar" className="userAvatar" />
+                        <Image src={session.user?.image || "/default-avatar.png"} alt="User Avatar" className="userAvatar" width={0}
+                            height={0}
+                            sizes="100vw"
+                            style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
                         <span>{session.user?.name}</span>
                         <button onClick={() => signOut()} className="signOutButton">
                             Sign out

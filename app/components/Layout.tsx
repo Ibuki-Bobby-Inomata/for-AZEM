@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className={styles.container}>
             {/* ヘッダー */}
             <header className={styles.header}>
-                <img src="/azem_logo.png" alt="Azem Logo" className={styles.logo} />
+                <Image src="/azem_logo.png" alt="Azem Logo" className={styles.logo} />
                 <div className={styles.userInfo}>
                     {session ? (
                         <>
