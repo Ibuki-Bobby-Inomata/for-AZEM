@@ -15,6 +15,7 @@ export default function Header() {
                     width={10}
                     height={10}
                     sizes="100vw"
+                    priority={true}  // 優先的に読み込む
                     style={{ width: "100px", height: "auto" }} />
             </Link>
 

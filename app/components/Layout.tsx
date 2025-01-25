@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className={styles.container}>
             {/* ヘッダー */}
             <header className={styles.header}>
-                <Image src="/azem_logo.png" alt="Azem Logo" className={styles.logo} />
+                <Image src="/azem_logo.png" alt="Azem Logo" className={styles.logo} priority={true} width={150} height={20} />
                 <div className={styles.userInfo}>
                     {session ? (
                         <>
@@ -19,6 +19,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                                 src={session.user?.image || "/default-avatar.png"}
                                 alt="User Avatar"
                                 className={styles.userAvatar}
+                                width={20}
+                                height={20}
                             />
                             <span>{session.user?.name}</span>
                             <button onClick={() => signOut()} className={styles.signOutButton}>
