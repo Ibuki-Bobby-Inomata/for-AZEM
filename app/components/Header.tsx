@@ -1,26 +1,31 @@
 "use client"
 
 import { useSession, signOut } from "next-auth/react"
-import styles from "@/app/styles/home.module.css"
+import Link from "next/link"
+
 
 export default function Header() {
-    const { data: session } = useSession()
+    const { data: session, status } = useSession()
 
     return (
-        <header className={styles.header}>
-            <img src="/azem_logo.png" alt="Azem Logo" className={styles.logo} />
+        <header className="header">
+            <Link href="/">
+                <img src="/azem_logo.png" alt="Azem Logo" className="logo" />
+            </Link>
 
-            <div className={styles.userInfo}>
-                {session ? (
+            <div className="userInfo">
+                {status === "loading" ? (
+                    <span>Loading...</span>
+                ) : session ? (
                     <>
-                        <img src={session.user?.image || "/default-avatar.png"} alt="User Avatar" className={styles.userAvatar} />
+                        <img src={session.user?.image || "/default-avatar.png"} alt="User Avatar" className="userAvatar" />
                         <span>{session.user?.name}</span>
-                        <button onClick={() => signOut()} className={styles.signOutButton}>
+                        <button onClick={() => signOut()} className="signOutButton">
                             Sign out
                         </button>
                     </>
                 ) : (
-                    <span>Loading...</span>
+                    <a href="/login">Sign in</a>
                 )}
             </div>
         </header>
