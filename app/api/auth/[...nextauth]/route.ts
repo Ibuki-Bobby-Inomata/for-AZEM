@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
     },
     // ログイン後のリダイレクト設定などを行う場合
     callbacks: {
-        async redirect({ url, baseUrl }) {
+        async redirect({ baseUrl }) {
             // デフォルトでは / (ホーム) にリダイレクト
             return baseUrl
         },

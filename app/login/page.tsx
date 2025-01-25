@@ -1,6 +1,4 @@
 "use client"
-
-import { signIn } from "next-auth/react"
 import GoogleSignInButton from "@/app/components/GoogleSignInButton"
 
 export default function LoginPage() {

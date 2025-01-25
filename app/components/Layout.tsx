@@ -2,6 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react"
 import styles from "@/app/styles/home.module.css"
+import Image from "next/image"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const { data: session } = useSession()
@@ -14,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className={styles.userInfo}>
                     {session ? (
                         <>
-                            <img
+                            <Image
                                 src={session.user?.image || "/default-avatar.png"}
                                 alt="User Avatar"
                                 className={styles.userAvatar}

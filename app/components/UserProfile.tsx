@@ -3,6 +3,7 @@
 import { useSession, signOut } from "next-auth/react"
 import { useEffect, useState } from "react"
 import CustomAlert from "@/app/components/CustomAlert"
+import Image from "next/image"
 
 export default function UserProfile() {
     const { data: session, status } = useSession()
@@ -28,7 +29,7 @@ export default function UserProfile() {
     return (
         <div style={profileContainerStyle}>
             {errorMessage && <CustomAlert message={errorMessage} />}
-            <img src={session.user?.image || "/default-avatar.png"} alt="Profile" style={profileImageStyle} />
+            <Image src={session.user?.image || "/default-avatar.png"} alt="Profile" style={profileImageStyle} />
             <div>
                 <p style={profileNameStyle}>{session.user?.name}</p>
                 <p style={profileEmailStyle}>{session.user?.email}</p>

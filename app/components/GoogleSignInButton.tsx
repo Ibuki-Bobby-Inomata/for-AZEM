@@ -1,11 +1,12 @@
 "use client"
 
 import { signIn } from "next-auth/react"
+import Image from "next/image"
 
 export default function GoogleSignInButton() {
     return (
         <button style={googleButtonStyle} onClick={() => signIn("google")}>
-            <img
+            <Image
                 src="https://developers.google.com/identity/images/g-logo.png"
                 alt="Google Icon"
                 style={iconStyle}
