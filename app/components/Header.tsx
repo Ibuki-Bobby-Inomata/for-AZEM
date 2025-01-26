@@ -16,7 +16,7 @@ export default function Header() {
                     height={10}
                     sizes="100vw"
                     priority={true}  // 優先的に読み込む
-                    style={{ width: "100px", height: "auto" }} />
+                    style={{ width: "150px", height: "auto" }} />
             </Link>
 
             <div className="userInfo">
