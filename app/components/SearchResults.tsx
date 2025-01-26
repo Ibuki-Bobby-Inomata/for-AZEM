@@ -3,7 +3,6 @@
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import styles from "@/app/styles/search.module.css"
-import SearchBar from "@/app/components/SearchBar"
 
 export default function SearchResults() {
     const searchParams = useSearchParams()
@@ -51,7 +50,6 @@ export default function SearchResults() {
 
     return (
         <>
-            <SearchBar />
             <h1>Search Results for: {query}</h1>
 
             {loading && <p>Loading...</p>}
