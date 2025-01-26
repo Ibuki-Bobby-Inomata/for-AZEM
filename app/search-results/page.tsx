@@ -1,7 +1,6 @@
 "use client"
 
 import { Suspense } from "react"
-// import Layout from "@/app/components/Layout"
 import SearchResults from "@/app/components/SearchResults"
 import Header from "@/app/components/Header"
 import Sidebar from "@/app/components/Sidebar"
@@ -23,9 +22,3 @@ export default function SearchResultsPage() {
         </div>
     )
 }
-
-// <Layout>
-//     <Suspense fallback={<p>Loading...</p>}>
-//         <SearchResults />
-//     </Suspense>
-// </Layout>
