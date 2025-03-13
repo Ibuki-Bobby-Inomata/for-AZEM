@@ -16,7 +16,8 @@ export default function Sidebar() {
                         style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
                     <h3>{session.user?.name}</h3>
                     <p>Recentory you saved</p>
-                    <input type="text" placeholder="🔍 search your saved" className="searchInputSaved" />
+                    <input type="text" placeholder="🔍 search your saved" className="searchInputSaved"
+                        style={{ width: "250px", height: "25px" }} />
                 </>
             ) : (
                 <p>Loading...</p>
