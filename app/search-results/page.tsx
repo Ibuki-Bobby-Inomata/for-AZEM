@@ -8,12 +8,14 @@ import SearchBar from "@/app/components/SearchBar"
 
 export default function SearchResultsPage() {
     return (
-        <div className="=container">
+        <div className="container">
             <Header />
             <div className="contentWrapper">
                 <Sidebar />
                 <main className="mainContent">
+                    {/* Existing SearchBar (unchanged). */}
                     <SearchBar />
+
                     <Suspense fallback={<p>Loading...</p>}>
                         <SearchResults />
                     </Suspense>
