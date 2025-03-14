@@ -202,50 +202,49 @@ export default function SearchResults() {
                     > */}
                     <option value="relevance">Relevance</option>
                     <option value="lastUpdatedDate">Last Updated Date</option>
-                </select>
-            </label>
+                </label>
 
-            <button onClick={handleClearFilters}>Clear</button>
-        </div>
-
-            {/* --- Loading & Results --- */ }
-    <h2>Search Results for: {rawQuery}</h2>
-    { loading && <p>Loading...</p> }
-    <div className={styles.resultsList}>
-        {!loading && results.length === 0 && <p>No results found.</p>}
-        {results.map((result, index) => (
-            <div key={index} className={styles.resultCard}>
-                <h3>{result.title}</h3>
-                <p><strong>ID:</strong> {result.id}</p>
-                <p><strong>Published:</strong> {result.published}</p>
-                <p><strong>Updated:</strong> {result.updated}</p>
-                <p><strong>Author:</strong> {result.author}</p>
-                <p><strong>Summary:</strong> {result.summary}</p>
-                <p><strong>Primary Category:</strong> {result.primary_category}</p>
-                <p><strong>Categories:</strong> {result.category.join(", ")}</p>
-                <p><strong>DOI:</strong> {result.doi}</p>
-                <p><strong>Journal Reference:</strong> {result.journal_ref}</p>
-                <p><strong>Comments:</strong> {result.comment}</p>
-                <a href={result.link} target="_blank" rel="noopener noreferrer">
-                    Read More
-                </a>
+                <button onClick={handleClearFilters}>Clear</button>
             </div>
-        ))}
-    </div>
 
-    {/* --- Pagination --- */ }
-    <div className={styles.pagination}>
-        <button onClick={handleGoToFirstPage} disabled={page === 1}>
-            Go to Page 1
-        </button>
-        <button onClick={handlePrevPage} disabled={page <= 1}>
-            Previous
-        </button>
-        <span>Page {page}</span>
-        <button onClick={handleNextPage} disabled={results.length < pageSize}>
-            Next
-        </button>
-    </div>
+            {/* --- Loading & Results --- */}
+            <h2>Search Results for: {rawQuery}</h2>
+            {loading && <p>Loading...</p>}
+            <div className={styles.resultsList}>
+                {!loading && results.length === 0 && <p>No results found.</p>}
+                {results.map((result, index) => (
+                    <div key={index} className={styles.resultCard}>
+                        <h3>{result.title}</h3>
+                        <p><strong>ID:</strong> {result.id}</p>
+                        <p><strong>Published:</strong> {result.published}</p>
+                        <p><strong>Updated:</strong> {result.updated}</p>
+                        <p><strong>Author:</strong> {result.author}</p>
+                        <p><strong>Summary:</strong> {result.summary}</p>
+                        <p><strong>Primary Category:</strong> {result.primary_category}</p>
+                        <p><strong>Categories:</strong> {result.category.join(", ")}</p>
+                        <p><strong>DOI:</strong> {result.doi}</p>
+                        <p><strong>Journal Reference:</strong> {result.journal_ref}</p>
+                        <p><strong>Comments:</strong> {result.comment}</p>
+                        <a href={result.link} target="_blank" rel="noopener noreferrer">
+                            Read More
+                        </a>
+                    </div>
+                ))}
+            </div>
+
+            {/* --- Pagination --- */}
+            <div className={styles.pagination}>
+                <button onClick={handleGoToFirstPage} disabled={page === 1}>
+                    Go to Page 1
+                </button>
+                <button onClick={handlePrevPage} disabled={page <= 1}>
+                    Previous
+                </button>
+                <span>Page {page}</span>
+                <button onClick={handleNextPage} disabled={results.length < pageSize}>
+                    Next
+                </button>
+            </div>
         </div >
     )
 }
