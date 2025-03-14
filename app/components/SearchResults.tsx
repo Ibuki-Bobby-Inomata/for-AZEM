@@ -15,7 +15,7 @@ function buildArxivQuery({
     startDate?: string
     endDate?: string
 }) {
-    // Split the query into words and prefix each with "all:"
+    // Split the query into words and prefix each with "all"
     const words = query
         .split(/\s+/)
         .map((w) => w.trim())
