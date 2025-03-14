@@ -189,10 +189,7 @@ export default function SearchResults() {
                         onChange={(e) => {
                             setSortBy(e.target.value as "relevance" | "lastUpdatedDate")
                         }}
-                    />
-                    <option value="relevance">Relevance</option>
-                    <option value="lastUpdatedDate">Last Updated Date</option>
-                </label>
+                    /></label>
                 <label>
                     <button onClick={handleClearFilters}>Clear</button>
                 </label>
