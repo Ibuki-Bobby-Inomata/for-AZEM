@@ -187,9 +187,15 @@ export default function SearchResults() {
                     <select
                         value={sortBy}
                         onChange={(e) => {
-                            setSortBy(e.target.value as "relevance" | "lastUpdatedDate")
+                            setPage(1)
+                            setSortBy(e.target.value as any)
                         }}
-                    /></label>
+                    >
+                        <option value="relevance">Relevance</option>
+                        <option value="lastUpdatedDate">Last Updated Date</option>
+                    </select>
+                </label>
+
                 <label>
                     <button onClick={handleClearFilters}>Clear</button>
                 </label>
