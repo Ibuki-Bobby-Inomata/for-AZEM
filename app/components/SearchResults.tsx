@@ -1,8 +1,23 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import styles from "@/app/styles/search.module.css"
+
+interface ArxivEntry {
+    id: string
+    title: string
+    summary: string
+    updated: string
+    published: string
+    author: string
+    link: string
+    primary_category: string
+    category: string[]
+    doi: string
+    journal_ref: string
+    comment: string
+}
 
 function buildArxivQuery({
     query,
@@ -15,21 +30,17 @@ function buildArxivQuery({
     startDate?: string
     endDate?: string
 }) {
-    // Split the query into words and prefix each with "all"
     const words = query
         .split(/\s+/)
         .map((w) => w.trim())
         .filter(Boolean)
 
-    // Join multiple words with +AND+
     let finalQuery = words.map((word) => `all:${word}`).join("+AND+")
 
-    // Category filter, e.g. cat:cs.LG
     if (category) {
         finalQuery += `+AND+cat:${category}`
     }
 
-    // Date range filter, e.g. submittedDate:[2020-01-01 TO 2020-12-31]
     if (startDate && endDate) {
         finalQuery += `+AND+submittedDate:[${startDate} TO ${endDate}]`
     }
@@ -41,36 +52,23 @@ export default function SearchResults() {
     const searchParams = useSearchParams()
     const rawQuery = searchParams.get("q") || ""
 
-
-    const [page, setPage] = useState(1) // 1-based
+    const [page, setPage] = useState(1)
     const pageSize = 10
 
     const [category, setCategory] = useState("")
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
-
     const [sortBy, setSortBy] = useState<"relevance" | "lastUpdatedDate">("relevance")
-    const [results, setResults] = useState<any[]>([])
+
+    // ↓ resultsを ArxivEntry[] で宣言
+    const [results, setResults] = useState<ArxivEntry[]>([])
     const [loading, setLoading] = useState(false)
 
-    // Scroll to top when page changes
-    useEffect(() => {
-        window.scrollTo(0, 0)
-    }, [page])
-
-    // Fetch on first render or whenever search params / filter / sort / pagination change
-    useEffect(() => {
-        if (!rawQuery) {
-            setResults([])
-            return
-        }
-        fetchResults()
-    }, [rawQuery, category, startDate, endDate, sortBy, page])
-
-    const fetchResults = async () => {
+    // 2. missing dependency への対策
+    // useCallback を使い、依存関係を明示する
+    const fetchResults = useCallback(async () => {
         setLoading(true)
         try {
-            // Build arXiv API query
             const finalQuery = buildArxivQuery({ query: rawQuery, category, startDate, endDate })
             const startIndex = (page - 1) * pageSize
 
@@ -81,22 +79,19 @@ export default function SearchResults() {
             const parser = new DOMParser()
             const xmlDoc = parser.parseFromString(xmlText, "text/xml")
 
-            const entries = Array.from(xmlDoc.getElementsByTagName("entry")).map((entry) => ({
-                id: entry.getElementsByTagName("id")[0]?.textContent,
-                title: entry.getElementsByTagName("title")[0]?.textContent,
-                summary: entry.getElementsByTagName("summary")[0]?.textContent,
-                updated: entry.getElementsByTagName("updated")[0]?.textContent,
-                published: entry.getElementsByTagName("published")[0]?.textContent,
-                author:
-                    entry
-                        .getElementsByTagName("author")[0]
-                        ?.getElementsByTagName("name")[0]?.textContent || "",
-                link: entry.getElementsByTagName("link")[0]?.getAttribute("href"),
-                primary_category: entry
-                    .getElementsByTagName("arxiv:primary_category")[0]
-                    ?.getAttribute("term"),
-                category: Array.from(entry.getElementsByTagName("category")).map((cat) =>
-                    cat.getAttribute("term")
+            const entries: ArxivEntry[] = Array.from(xmlDoc.getElementsByTagName("entry")).map((entry) => ({
+                id: entry.getElementsByTagName("id")[0]?.textContent ?? "",
+                title: entry.getElementsByTagName("title")[0]?.textContent ?? "",
+                summary: entry.getElementsByTagName("summary")[0]?.textContent ?? "",
+                updated: entry.getElementsByTagName("updated")[0]?.textContent ?? "",
+                published: entry.getElementsByTagName("published")[0]?.textContent ?? "",
+                author: entry.getElementsByTagName("author")[0]
+                    ?.getElementsByTagName("name")[0]?.textContent || "",
+                link: entry.getElementsByTagName("link")[0]?.getAttribute("href") || "",
+                primary_category:
+                    entry.getElementsByTagName("arxiv:primary_category")[0]?.getAttribute("term") || "",
+                category: Array.from(entry.getElementsByTagName("category")).map(
+                    (cat) => cat.getAttribute("term") || ""
                 ),
                 doi: entry.getElementsByTagName("arxiv:doi")[0]?.textContent || "N/A",
                 journal_ref: entry.getElementsByTagName("arxiv:journal_ref")[0]?.textContent || "N/A",
@@ -109,22 +104,34 @@ export default function SearchResults() {
             setResults([])
         }
         setLoading(false)
-    }
+    }, [rawQuery, category, startDate, endDate, sortBy, page, pageSize])
 
+    // ページが変わったら先頭へ戻す
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [page])
+
+    // 依存しているfetchResultsは useCallback で定義したのでOK
+    useEffect(() => {
+        if (!rawQuery) {
+            setResults([])
+            return
+        }
+        fetchResults()
+    }, [rawQuery, fetchResults])
+
+    // ページネーション
     const handlePrevPage = () => {
         if (page > 1) setPage(page - 1)
     }
-
     const handleNextPage = () => {
-        // If you want to check no more pages, you can conditionally disable the button if results < pageSize
         setPage(page + 1)
     }
-
     const handleGoToFirstPage = () => {
         setPage(1)
     }
 
-    // ★ フィルタを全部リセットする処理
+    // フィルタをクリア
     const handleClearFilters = () => {
         setCategory("")
         setStartDate("")
@@ -138,71 +145,62 @@ export default function SearchResults() {
             {/* --- Advanced Filters & Sorting --- */}
             <div className={styles.searchFilters}>
                 <h2>Advanced Filters</h2>
+                <label>
+                    Category:
+                    <input
+                        type="text"
+                        placeholder="e.g. cs.LG"
+                        value={category}
+                        onChange={(e) => {
+                            setPage(1)
+                            setCategory(e.target.value)
+                        }}
+                    />
+                </label>
 
-                <div className={styles.filtersRow}>
-                    <label>
-                        Category:
-                        <input
-                            type="text"
-                            placeholder="e.g. cs.LG"
-                            value={category}
-                            onChange={(e) => {
-                                setPage(1)
-                                setCategory(e.target.value)
-                            }}
-                        />
-                    </label>
+                <label>
+                    Start Date:
+                    <input
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => {
+                            setPage(1)
+                            setStartDate(e.target.value)
+                        }}
+                    />
+                </label>
 
-                    <label>
-                        Start Date:
-                        <input
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => {
-                                setPage(1)
-                                setStartDate(e.target.value)
-                            }}
-                        />
-                    </label>
+                <label>
+                    End Date:
+                    <input
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => {
+                            setPage(1)
+                            setEndDate(e.target.value)
+                        }}
+                    />
+                </label>
 
-                    <label>
-                        End Date:
-                        <input
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => {
-                                setPage(1)
-                                setEndDate(e.target.value)
-                            }}
-                        />
-                    </label>
-
-                    <label>
-                        Sort by:
-                        <select
-                            value={sortBy}
-                            onChange={(e) => {
-                                setPage(1)
-                                setSortBy(e.target.value as any)
-                            }}
-                        >
-                            <option value="relevance">Relevance</option>
-                            <option value="lastUpdatedDate">Last Updated Date</option>
-                        </select>
-                    </label>
-
-                    {/* 右側に配置するクリアボタン */}
-                    <button
-                        className={styles.clearButton}
-                        onClick={handleClearFilters}
+                <label>
+                    Sort by:
+                    <select
+                        value={sortBy}
+                        onChange={(e) => {
+                            setPage(1)
+                            setSortBy(e.target.value as any)
+                        }}
                     >
-                        Clear
-                    </button>
-                </div>
+                        <option value="relevance">Relevance</option>
+                        <option value="lastUpdatedDate">Last Updated Date</option>
+                    </select>
+                </label>
+
+                <button onClick={handleClearFilters}>Clear</button>
             </div>
 
             {/* --- Loading & Results --- */}
-            <h2>Search Results for: {rawQuery} (p. {page})</h2>
+            <h2>Search Results for: {rawQuery}</h2>
             {loading && <p>Loading...</p>}
             <div className={styles.resultsList}>
                 {!loading && results.length === 0 && <p>No results found.</p>}
