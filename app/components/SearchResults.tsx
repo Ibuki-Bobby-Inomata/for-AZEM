@@ -41,8 +41,6 @@ export default function SearchResults() {
     const searchParams = useSearchParams()
     const rawQuery = searchParams.get("q") || ""
 
-    // コンテナ要素を参照するための ref
-    const containerRef = useRef<HTMLDivElement>(null)
 
     const [page, setPage] = useState(1) // 1-based
     const pageSize = 10
